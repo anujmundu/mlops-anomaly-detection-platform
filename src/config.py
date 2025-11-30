@@ -3,7 +3,7 @@
 Adheres to 12-factor principles using Pydantic Settings.
 """
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -58,7 +58,7 @@ class Settings(BaseSettings):
 
     # Inference API
     api_host: str = Field(default="0.0.0.0", description="FastAPI host")
-    api_port: int = Field(default=8000, description="FastAPI port")
+    api_port: int = Field(default=8000, validation_alias=AliasChoices("api_port", "port"), description="FastAPI port")
     api_workers: int = Field(default=4, description="Uvicorn workers")
 
 

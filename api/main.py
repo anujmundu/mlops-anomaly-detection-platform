@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Response, status
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 
@@ -19,6 +20,7 @@ from src.config import settings
 from src.features.feature_pipeline import StatefulFeatureEngine
 from src.models.isolation_forest import IsolationForestDetector
 from src.validation.validator import ValidationFirewall
+from api.dashboard import get_dashboard_html
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("InferenceService")
@@ -162,9 +164,21 @@ def dispatch_anomaly_alert(prediction: PredictionResponse) -> None:
 # ==============================================================================
 # API Endpoints
 # ==============================================================================
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    """Welcome and platform service discovery."""
+    """Live interactive operations dashboard & recruiter showcase."""
+    return HTMLResponse(content=get_dashboard_html(), status_code=200)
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard():
+    """Direct alias for operations console."""
+    return HTMLResponse(content=get_dashboard_html(), status_code=200)
+
+
+@app.get("/v1/info")
+async def platform_info():
+    """Platform discovery metadata in JSON format."""
     return {
         "service": "Real-Time Industrial Anomaly Detection Service",
         "system_designation": "IT-ADS",
@@ -172,6 +186,7 @@ async def root():
         "status": "OPERATIONAL",
         "champion_model": "Isolation Forest",
         "endpoints": {
+            "dashboard": "/",
             "docs": "/docs",
             "health": "/v1/health",
             "predict": "/v1/predict",

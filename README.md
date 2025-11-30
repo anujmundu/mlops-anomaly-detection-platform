@@ -80,6 +80,20 @@ flowchart TD
 
 ## 📊 Production Observability & Live Dashboards
 
+### 🎛️ IT-ADS Anomaly Operations Center (Live Cloud Console)
+Interactive, dark-mode real-time operations console deployed on Render serving live predictions, streaming telemetry charts, latency percentiles, and DLQ quarantine gates:
+
+👉 **Live URL:** [mlops-anomaly-detection-platform.onrender.com](https://mlops-anomaly-detection-platform.onrender.com)
+
+| Operational Scenario | Live Operations Console Screenshot |
+|---|---|
+| **🟢 Normal Operating State**<br>Baseline pump telemetry with low anomaly score ($0.452$), healthy streaming window, and low green probability gauge. | ![Normal State](screenshots/01_normal_operating_state.png) |
+| **🔥 Thermal Shock Anomaly**<br>Sudden temperature surge to $135^\circ\text{C}$; model triggers red critical alarm ($0.616$), isolates top deviation (`rolling_mean_30m_temp`), and spikes probability gauge. | ![Thermal Shock](screenshots/02_thermal_shock_anomaly.png) |
+| **⚙️ Bearing Wear Degradation**<br>Vibration surge to $30.0\,\text{mm/s}$ and shaft speed to $5800\,\text{RPM}$; model isolates rotational norm deviations and flags critical anomaly in $8.41\,\text{ms}$. | ![Bearing Wear](screenshots/03_bearing_wear_degradation.png) |
+| **🛡️ Data Quality Firewall Quarantine (DLQ)**<br>Negative pressure input ($-45\,\text{psi}$) rejected with HTTP 422 by Great Expectations; anomaly score marked as **REJECTED (422)** and payload diverted to quarantine. | ![Quarantine DLQ](screenshots/04_test_quarantine_dlq_rejected.png) |
+
+---
+
 ### 📈 Grafana Industrial Telemetry & Model Observability
 Pre-provisioned operational dashboard tracking real-time streaming telemetry, model inference percentiles, anomaly spikes, and data validation firewall quarantines:
 

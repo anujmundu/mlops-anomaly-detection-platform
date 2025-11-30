@@ -63,3 +63,17 @@ def test_api_metrics_endpoint(client):
     resp = client.get("/metrics")
     assert resp.status_code == 200
     assert "anomaly_predictions_total" in resp.text
+
+
+def test_api_dashboard_endpoints(client):
+    resp_root = client.get("/")
+    assert resp_root.status_code == 200
+    assert "IT-ADS Anomaly Operations Center" in resp_root.text
+
+    resp_dash = client.get("/dashboard")
+    assert resp_dash.status_code == 200
+    assert "IT-ADS Anomaly Operations Center" in resp_dash.text
+
+    resp_info = client.get("/v1/info")
+    assert resp_info.status_code == 200
+    assert resp_info.json()["status"] == "OPERATIONAL"
